@@ -758,6 +758,7 @@ void Server::queueUpdates(const QVector<UpdateNotification> &notifications)
         QSet<Peer> interestingPeers;
         switch (notification.type) {
         case UpdateNotification::Type::NewMessage:
+        case UpdateNotification::Type::EditMessage:
         {
             TLUpdate update;
             const quint64 globalMessageId = recipient->getPostBox()->getMessageGlobalId(notification.messageId);
@@ -773,6 +774,12 @@ void Server::queueUpdates(const QVector<UpdateNotification> &notifications)
                     update.tlType = TLValue::UpdateNewChannelMessage;
                 } else {
                     update.tlType = TLValue::UpdateNewMessage;
+                }
+            } else if (notification.type == UpdateNotification::Type::EditMessage) {
+                if (messageData->toPeer().type() == Peer::Channel) {
+                    update.tlType = TLValue::UpdateEditChannelMessage;
+                } else {
+                    update.tlType = TLValue::UpdateEditMessage;
                 }
             } else {
                 qCWarning(lcServerUpdates) << CALL_INFO << "unexpected notification type";
