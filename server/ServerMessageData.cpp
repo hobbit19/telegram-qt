@@ -4,22 +4,11 @@ namespace Telegram {
 
 namespace Server {
 
-MessageData::MessageData(quint32 from, Peer to) :
-    m_to(to),
-    m_fromId(from)
+MessageData::MessageData(quint32 from, Peer to, const MessageContent &content)
+    : m_content(content)
+    , m_to(to)
+    , m_fromId(from)
 {
-}
-
-MessageData::MessageData(quint32 from, Peer to, const QString &text) :
-    MessageData(from, to)
-{
-    m_text = text;
-}
-
-MessageData::MessageData(quint32 from, Peer to, const MediaData &media) :
-    MessageData(from, to)
-{
-    m_media = media;
 }
 
 void MessageData::setGlobalId(quint64 id)
@@ -33,6 +22,16 @@ quint32 MessageData::date() const
     return static_cast<quint32>(secs);
 }
 
+quint32 MessageData::editDate() const
+{
+    return m_editDate;
+}
+
+void MessageData::setContent(const MessageContent &newContent)
+{
+    m_content = newContent;
+}
+
 void MessageData::setDate32(quint32 date)
 {
     m_date = date;
@@ -42,6 +41,11 @@ void MessageData::setDate32(quint32 date)
 void MessageData::setDate64(quint64 date)
 {
     m_date = date;
+}
+
+void MessageData::setEditDate(quint32 date)
+{
+    m_editDate = date;
 }
 
 bool MessageData::isMessageToSelf() const
@@ -62,6 +66,16 @@ Peer MessageData::getDialogPeer(quint32 applicantUserId) const
         }
     }
     return m_to;
+}
+
+MessageContent::MessageContent(const QString &text)
+    : m_text(text)
+{
+}
+
+MessageContent::MessageContent(const MediaData &media)
+    : m_media(media)
+{
 }
 
 } // Server namespace
