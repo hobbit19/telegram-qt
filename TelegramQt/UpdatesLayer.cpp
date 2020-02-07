@@ -13,7 +13,7 @@
 
 #include <QLoggingCategory>
 
-Q_LOGGING_CATEGORY(c_updatesLoggingCategory, "telegram.client.updates", QtWarningMsg)
+Q_LOGGING_CATEGORY(c_updatesLoggingCategory, "telegram.client.updates", QtDebugMsg)
 
 namespace Telegram {
 
